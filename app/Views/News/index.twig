@@ -1,14 +1,6 @@
 {% include 'Partials/base.twig' %}
 
 <section class="main-content">
-    <!-- Search Field -->
-    <form action="/search" method="get">
-        <input type="text" name="query" placeholder="Insert title">
-        <button type="submit">Search</button>
-    </form>
-
-    <a href="/article/create" class="create-article-btn">Create New Article</a>
-
     <h1 class="news-box-single">Articles</h1>
     <div class="news-container">
         {% if articles.isEmpty() %}
