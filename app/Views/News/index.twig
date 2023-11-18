@@ -1,0 +1,49 @@
+{% include 'Partials/base.twig' %}
+
+<section class="main-content">
+    <div class="weather" id="weatherButton">
+        <div>
+            <p>{{ weather.getCityName() }}</p>
+            <h1 class="symbol">{{ weather.getDescription() }}</h1>
+            <p>{{ weather.getTemp() }}</p>
+        </div>
+    </div>
+    <script>
+        // Get the weather div by its id
+        var weatherButton = document.getElementById('weatherButton');
+
+        // Add a click event listener to the div
+        weatherButton.addEventListener('click', function() {
+            // Redirect the user to the "/weather" page
+            window.location.href = '/weather';
+        });
+    </script>
+    <div class="search-box">
+        <form method="get" action="/search">
+            <input type="text" name="q" placeholder="Search Articles">
+            <select name="country" id="country-select">
+                <option value="lv">Chose country</option>
+                <option value="us">🇺🇸 USA</option>
+                <option value="au">🇦🇺 Australia</option>
+                <option value="gb">🇬🇧 United Kingdom</option>
+            </select>
+            <input type="date" name="from" placeholder="From Date">
+            <input type="date" name="to" placeholder="To Date">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <h1 class="main-content">{{ message }}</h1>
+    <div class="news-container">
+        {% for news in newsCollection.getNewsCollection() %}
+            <div class="news-box">
+                <img src="{{ news.getImage() }}" alt="{{ news.getTitle() }}">
+                <h2>{{ news.getTitle() }}</h2>
+                <p>{{ news.getDescription() }}</p>
+                <a href="{{ news.getUrl() }}" target="_blank">Read More</a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% include 'Partials/footer.twig' %}
+

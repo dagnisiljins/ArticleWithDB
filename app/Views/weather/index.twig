@@ -1,0 +1,21 @@
+{% include 'Partials/base.twig' %}
+
+<section class="main-content">
+    <div class="weather">
+        <div>
+            <p>{{ defaultWeather.getCityName() }}</p>
+            <h1 class="symbol">{{ defaultWeather.getDescription() }}</h1>
+            <p>{{ defaultWeather.getTemp() }}</p>
+        </div>
+        <form method="get">
+            <input type="text" name="s" placeholder="Search City">
+            <button type="submit">Search</button>
+        </form>
+        <div class="searched-weather">
+            <p>{{ searchedWeather.getCityName() }}</p>
+            <h1 class="symbol">{{ searchedWeather.getDescription() }}</h1>
+            <p>{{ searchedWeather.getTemp() }}</p>
+        </div>
+    </div>
+</section>
+{% include 'Partials/footer.twig' %}
