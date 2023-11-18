@@ -25,4 +25,9 @@ class NewsCollection
         return $this->newsCollection;
     }
 
+    public function isEmpty(): bool
+    {
+        return empty($this->newsCollection);
+    }
+
 }

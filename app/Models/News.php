@@ -8,25 +8,29 @@ class News
 {
 
 
+    private int $id;
     private string $title;
     private string $description;
-    private string $url;
-    private string $image;
+    private string $text;
+
 
     public function __construct(
+        int $id,
         string $title,
-        ?string $description,
-        string $url,
-        ?string $image
+        string $description,
+        string $text
     )
     {
-
+        $this->id = $id;
         $this->title = $title;
-        $this->description = $description ?? 'No description';
-        $this->url = $url;
-        $this->image = $image ?? 'https://ajr.org/wp-content/themes/AJR-theme/images/news-placeholder.jpg';
+        $this->description = $description;
+        $this->text = $text;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
     public function getTitle(): string
     {
         return $this->title;
@@ -37,14 +41,9 @@ class News
         return $this->description;
     }
 
-    public function getUrl(): string
+    public function getText(): string
     {
-        return $this->url;
-    }
-
-    public function getImage(): string
-    {
-        return $this->image;
+        return $this->text;
     }
 
 

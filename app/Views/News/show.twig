@@ -1,0 +1,29 @@
+{% include 'Partials/base.twig' %}
+
+<section class="main-content">
+    <!-- Search Field -->
+    <form action="/search" method="get">
+        <input type="text" name="query" placeholder="Search articles...">
+        <button type="submit">Search</button>
+    </form>
+
+    <a href="/article/create" class="create-article-btn">Create New Article</a>
+
+    <div class="news-container">
+        <div class="news-box-single">
+            <h2>{{ article.getTitle() }}</h2>
+            <p>{{ article.getDescription() }}</p>
+            <p>{{ article.getText() }}</p>
+
+            <div class="article-actions">
+                <a href="/edit/{{ article.getId() }}" class="edit-article-btn">Edit Article</a>
+
+                <form action="/delete/{{ article.getId() }}" method="post" class="delete-article-form">
+                    <button type="submit" class="delete-article-btn">DELETE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include 'Partials/footer.twig' %}

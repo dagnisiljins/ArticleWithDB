@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace App\Database;
 
-class DatabaseConnection {
+use PDO;
+
+class DatabaseConnection
+{
     private static $instance = null;
     private $pdo;
 
     private $host = 'localhost';
-    private $db   = 'your_database_name';
-    private $user = 'your_username';
-    private $pass = 'your_password';
+    private $port = 3306;
+    private $db   = 'myapp';
+    private $user = 'root';
+    private $pass = '';
     private $charset = 'utf8mb4';
 
     private function __construct() {
-        $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
+        $dsn = "mysql:host=$this->host;port=$this->port;dbname=$this->db;charset=$this->charset";
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

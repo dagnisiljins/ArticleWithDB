@@ -123,6 +123,15 @@ nav a {
     margin: 10px 0;
 }
 
+.news-box-single {
+    flex: 0 0 calc(100% - 20px);
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
 footer {
     background-color: #333;
     color: #fff;
@@ -178,6 +187,30 @@ footer {
 
 .symbol {
     font-size: 136px;
+}
+
+.article-actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.edit-article-btn, .delete-article-btn {
+    padding: 8px 15px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+}
+
+.delete-article-btn {
+    background-color: #dc3545;
+}
+
+.delete-article-form {
+    margin: 0;
 }
 
 

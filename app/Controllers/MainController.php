@@ -4,69 +4,177 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Api;
+use App\Database\DatabaseConnection;
+use App\Models\News;
+use App\Models\NewsCollection;
 use App\Response;
-use Carbon\Carbon;
-use App\WeatherApi;
 
 class MainController
 {
-    private Api $api;
-    private WeatherApi $weatherApi;
 
-    public function __construct()
+    public function index(): Response
     {
-        $this->api = new Api();
-        $this->weatherApi = new WeatherApi();
-    }
-    public function search(): Response
-    {
-        $setToToday = Carbon::now()->format('Y-m-d');
+        $db = DatabaseConnection::getInstance()->getConnection();
+        $stmt = $db->query("SELECT * FROM articles");
 
-        $q = $_GET['q'] ?? '';
-        $country = $_GET['country'] ?? 'lv';
-        $from = $_GET['from'] ?? null;
-        $to = $_GET['to'] ?? $setToToday;
-
-        $countryMappings = [
-            'us' => 'USA',
-            'au' => 'Australia',
-            'gb' => 'United Kingdom',
-            'lv' => 'Latvia',
-        ];
-
-        $countryToDisplay = $countryMappings[$country];
-
-        $to = Carbon::parse($to)->format('Y-m-d');
-
-        if (!empty($from) && !empty($to)) {
-            $fromDate = Carbon::createFromFormat('Y-m-d', $from);
-            $toDate = Carbon::createFromFormat('Y-m-d', $to);
-
-            $searchDays = $fromDate->diffInDays(Carbon::now()->format('Y-m-d'));
-
-            if($searchDays > 30) {
-                return new Response(
-                    'News/index',
-                    [
-                        'message' => "You can't search articles older then 30 days!"
-                    ]
-                );
-            }
+        $articles = new NewsCollection();
+        while ($row = $stmt->fetch()) {
+            $articles->add(new News(
+                $row['id'],
+                $row['title'],
+                $row['description'],
+                $row['text']
+            ));
         }
 
-        $news = $this->api->fetchNews($q, $country, $from, $to);
-
-        $weatherData = $this->weatherApi->fetchWeatherFromUrl('Riga');
-
         return new Response(
-            'News/index',
-            [
-                'message' => 'Top Articles in ' . $countryToDisplay,
-                'newsCollection' => $news,
-                'weather' => $weatherData
-            ]
+            'news/index',
+            ['articles' => $articles]
         );
     }
+
+    public function show(array $vars): Response
+    {
+        $id = (int)$vars['id'];
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT * FROM articles WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+
+        $article = null;
+        if ($row = $stmt->fetch()) {
+            $article = new News(
+                $row['id'],
+                $row['title'],
+                $row['description'],
+                $row['text']
+            );
+        }
+        //dump($article);die;
+        return new Response(
+            'news/show',
+            ['article' => $article]
+        );
+    }
+
+    public function create(): Response
+    {
+        return new Response(
+            'news/create',
+            []
+        );
+
+    }
+
+    public function store(): string
+    {
+        //todo add $_SESSION text to inform that new article is added
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $description = $_POST['description'] ?? '';
+        $text = $_POST['text'] ?? '';
+
+        $stmt = $db->prepare("INSERT INTO articles (title, description, text) VALUES (:title, :description, :text)");
+        $stmt->execute([
+            'title' => $title,
+            'description' => $description,
+            'text' => $text
+        ]);
+
+        header('Location: /');
+        exit;
+    }
+
+    public function search(): Response
+    {
+        $title = $_GET['query'] ?? '';
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT * FROM articles WHERE title LIKE :title");
+        $stmt->execute(['title' => '%' . $title . '%']);
+
+        $articles = new NewsCollection();
+        while ($row = $stmt->fetch()) {
+            $articles->add(new News(
+                $row['id'],
+                $row['title'],
+                $row['description'],
+                $row['text']
+            ));
+        }
+
+        return new Response(
+            'news/index',
+            ['articles' => $articles]
+        );
+    }
+
+    public function edit(array $vars): Response
+    {
+        $editId = (int)$vars['id'];
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT * FROM articles WHERE id = :id");
+        $stmt->execute(['id' => $editId]);
+
+        $article = null;
+        if ($row = $stmt->fetch()) {
+            $article = new News(
+                $row['id'],
+                $row['title'],
+                $row['description'],
+                $row['text']
+            );
+        }
+
+        return new Response(
+            'news/edit',
+            ['article' => $article]
+        );
+    }
+
+    public function update(): string
+    {
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+
+        $id = $_POST['id'] ?? null;
+        $title = $_POST['title'] ?? '';
+        $description = $_POST['description'] ?? '';
+        $text = $_POST['text'] ?? '';
+
+        if ($id) {
+            $stmt = $db->prepare("UPDATE articles SET title = :title, description = :description, text = :text WHERE id = :id");
+            $stmt->execute([
+                'title' => $title,
+                'description' => $description,
+                'text' => $text,
+                'id' => $id
+            ]);
+        }
+
+        header('Location: /article/' . $id);
+        exit;
+    }
+
+    public function delete(array $vars): string
+    {
+        $deleteId = (int)$vars['id'];
+
+        $db = DatabaseConnection::getInstance()->getConnection();
+
+
+        $stmt = $db->prepare("DELETE FROM articles WHERE id = :id");
+        $stmt->execute([
+            'id' => $deleteId
+        ]);
+
+
+        header('Location: /');
+        exit;
+    }
+
 
 }
