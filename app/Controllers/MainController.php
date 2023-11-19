@@ -85,7 +85,6 @@ class MainController
             'text' => $text
         ]);
 
-        //todo delete if needed Notification allert
         NotificationManager::setNotification("Article successfully created!", "success");
 
         header('Location: /');
@@ -155,7 +154,6 @@ class MainController
             ]);
         }
 
-        //todo delete if needed Notification allert
         NotificationManager::setNotification("Article successfully edited!", "success");
 
         header('Location: /article/' . $id);
