@@ -6,8 +6,10 @@
             {{ notification.message }}
         </div>
     {% endfor %}
+    {% set images = ['DALLE1.png', 'DALLE2.png', 'DALLE3.png'] %}
     <div class="news-container">
         <div class="news-box-single">
+            <img src="/images/{{ random(images) }}" alt="Random Image">
             <h2>{{ article.getTitle() }}</h2><br>
             <h5>{{ article.getDescription() }}</h5><br>
             <p>{{ article.getText() }}</p><br>
@@ -15,12 +17,18 @@
             <div class="article-actions">
                 <a href="/edit/{{ article.getId() }}" class="edit-article-btn">Edit Article</a>
 
-                <form action="/delete/{{ article.getId() }}" method="post" class="delete-article-form">
+                <form action="/delete/{{ article.getId() }}" method="post" class="delete-article-form" onsubmit="return confirmDelete()">
                     <button type="submit" class="delete-article-btn">DELETE</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    function confirmDelete() {
+        return confirm("Do you want to delete this article?");
+    }
+</script>
 
 {% include 'Partials/footer.twig' %}
