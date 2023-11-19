@@ -29,9 +29,27 @@
                     <a class="nav-link">{{ globalTime }}</a>
                 </li>
             </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a a id="globalTime">Time</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
+<script>
+    function formatTime(date) {
+        return date.toLocaleTimeString();
+    }
+
+    function updateTime() {
+        const now = new Date();
+        const timeString = formatTime(now);
+        document.getElementById('globalTime').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>
 
 
 

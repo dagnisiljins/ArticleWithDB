@@ -1,6 +1,11 @@
 {% include 'Partials/base.twig' %}
 
 <section class="main-content">
+    {% for notification in notifications %}
+        <div class="alert alert-{{ notification.type }}">
+            {{ notification.message }}
+        </div>
+    {% endfor %}
     <h1 class="news-box-single">Articles</h1>
     <div class="news-container">
         {% if articles.isEmpty() %}
@@ -9,8 +14,8 @@
             {% for article in articles.getNewsCollection() %}
                 <div class="news-box">
                     <h2>{{ article.getTitle() }}</h2>
-                    <p>{{ article.getDescription() }}</p>
-                    <a href="/article/{{ article.getId() }}">Read More</a>
+                    <p>{{ article.getDescription() }}</p><br>
+                    <a href="/article/{{ article.getId() }}" class="edit-article-btn">Read More</a>
                 </div>
             {% endfor %}
         {% endif %}

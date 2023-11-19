@@ -1,6 +1,11 @@
 {% include 'Partials/base.twig' %}
 
 <section class="main-content">
+    {% for notification in notifications %}
+        <div class="alert alert-{{ notification.type }}">
+            {{ notification.message }}
+        </div>
+    {% endfor %}
     <div class="news-container">
         <div class="news-box-single">
             <h2>{{ article.getTitle() }}</h2><br>

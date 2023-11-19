@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use App\Response;
 use App\Router\Router;
 use Twig\Environment;
@@ -16,7 +18,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $loader = new FilesystemLoader(__DIR__ . '/../app/Views/');
 $twig = new Environment($loader);
 
-$currentTime = Carbon::now('Europe/Riga')->format('Y-m-d | H:i');
+$currentTime = Carbon::now('Europe/Riga')->format('Y-m-d');
 $twig->addGlobal('globalTime', $currentTime);
 
 
@@ -38,9 +40,17 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
 
         $response = (new $className())->{$method}($vars);
+        function addNotificationsToTwig(Environment $twig): void {
+            if (isset($_SESSION['notifications'])) {
+                $twig->addGlobal('notifications', $_SESSION['notifications']);
+                unset($_SESSION['notifications']);
+            }
+        }
+        addNotificationsToTwig($twig);
 
         /** @var Response $response */
         echo $twig->render($response->getViewName() . '.twig', $response->getData());
+
 
         break;
 }
