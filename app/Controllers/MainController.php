@@ -14,7 +14,7 @@ class MainController
 
     public function index(): Response
     {
-        $db = DatabaseConnection::getInstance()->getConnection();
+        $db = DatabaseConnection::getInstance()->getConnection();// todo put this in constructor
         $stmt = $db->query("SELECT * FROM articles");
 
         $articles = new NewsCollection();

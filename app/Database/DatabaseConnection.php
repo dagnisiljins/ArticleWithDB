@@ -8,15 +8,15 @@ use PDO;
 
 class DatabaseConnection
 {
-    private static $instance = null;
-    private $pdo;
+    private static ?DatabaseConnection $instance = null;
+    private PDO $pdo;
 
-    private $host = 'localhost';
-    private $port = 3306;
-    private $db   = 'myapp';
-    private $user = 'root';
-    private $pass = '';
-    private $charset = 'utf8mb4';
+    private string $host = 'localhost';
+    private int $port = 3306;
+    private string $db   = 'myapp';
+    private string $user = 'root';
+    private string $pass = '';
+    private string $charset = 'utf8mb4';
 
     private function __construct() {
         $dsn = "mysql:host=$this->host;port=$this->port;dbname=$this->db;charset=$this->charset";
@@ -33,25 +33,20 @@ class DatabaseConnection
         }
     }
 
-    public static function getInstance() {
+    public static function getInstance(): DatabaseConnection
+    {
         if (self::$instance === null) {
             self::$instance = new self();
         }
         return self::$instance;
     }
 
-    public function getConnection() {
+    public function getConnection(): PDO
+    {
         return $this->pdo;
     }
 
-    // Prevent cloning and unserialization (which would create multiple instances)
+
     private function __clone() { }
     private function __wakeup() { }
 }
-
-// Usage
-//$db = DatabaseConnection::getInstance()->getConnection();
-//$stmt = $db->query('SELECT * FROM table');
-//while ($row = $stmt->fetch()) {
-//    // Do something with $row
-//}
