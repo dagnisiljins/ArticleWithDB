@@ -169,6 +169,8 @@ class MainController
             'id' => $deleteId
         ]);
 
+        NotificationManager::setNotification("Article successfully deleted!", "success");
+
         header('Location: /');
         exit;
     }
