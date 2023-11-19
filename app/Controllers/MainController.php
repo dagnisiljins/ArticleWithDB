@@ -145,7 +145,9 @@ class MainController
         $text = $_POST['text'] ?? '';
 
         if ($id) {
-            $stmt = $this->db->prepare("UPDATE articles SET title = :title, description = :description, text = :text WHERE id = :id");
+            $stmt = $this->db->prepare(
+                "UPDATE articles SET title = :title, description = :description, text = :text WHERE id = :id"
+            );
             $stmt->execute([
                 'title' => $title,
                 'description' => $description,
