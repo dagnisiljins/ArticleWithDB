@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-class Response
+class Response // todo make as interface
 {
     private string $viewName;
     private array $data;

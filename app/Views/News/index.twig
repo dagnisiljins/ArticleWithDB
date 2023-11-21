@@ -13,7 +13,10 @@
         {% else %}
             {% for article in articles.getNewsCollection() %}
                 <div class="news-box">
-                    <h2>{{ article.getTitle() }}</h2>
+                    <a href="/article/{{ article.getId() }}">
+                        <h2>{{ article.getTitle() }}</h2>
+                    </a>
+                    <p>{{ article.getDate() }}</p><br>
                     <p>{{ article.getDescription() }}</p><br>
                     <a href="/article/{{ article.getId() }}" class="edit-article-btn">Read More</a>
                 </div>

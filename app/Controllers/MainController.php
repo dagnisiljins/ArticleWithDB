@@ -9,6 +9,7 @@ use App\Models\News;
 use App\Models\NewsCollection;
 use App\Response;
 use App\Utils\NotificationManager;
+use Carbon\Carbon;
 
 class MainController
 {
@@ -28,7 +29,8 @@ class MainController
                 $row['id'],
                 $row['title'],
                 $row['description'],
-                $row['text']
+                $row['text'],
+                $row['date']
             ));
         }
 
@@ -51,7 +53,8 @@ class MainController
                 $row['id'],
                 $row['title'],
                 $row['description'],
-                $row['text']
+                $row['text'],
+                $row['date']
             );
         }
 
@@ -70,19 +73,22 @@ class MainController
 
     }
 
-    public function store(): string
+    public function store(): string // todo: respect/validation validate POST
     {
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
         $text = $_POST['text'] ?? '';
 
+
+
         $stmt = $this->db->prepare(
-            "INSERT INTO articles (title, description, text) VALUES (:title, :description, :text)"
+            "INSERT INTO articles (title, description, text, date) VALUES (:title, :description, :text, :date)"
         );
         $stmt->execute([
             'title' => $title,
             'description' => $description,
-            'text' => $text
+            'text' => $text,
+            'date' => Carbon::now()
         ]);
 
         NotificationManager::setNotification("Article successfully created!", "success");
@@ -104,7 +110,8 @@ class MainController
                 $row['id'],
                 $row['title'],
                 $row['description'],
-                $row['text']
+                $row['text'],
+                $row['date']
             ));
         }
 
@@ -127,7 +134,8 @@ class MainController
                 $row['id'],
                 $row['title'],
                 $row['description'],
-                $row['text']
+                $row['text'],
+                $row['date']
             );
         }
 
@@ -153,6 +161,7 @@ class MainController
                 'description' => $description,
                 'text' => $text,
                 'id' => $id
+                // todo add time stump when changes where made, seperate tabele updated_at
             ]);
         }
 
@@ -173,7 +182,7 @@ class MainController
 
         NotificationManager::setNotification("Article successfully deleted!", "success");
 
-        header('Location: /');
+        header('Location: /');//todo make interface Response and class ViewResponse and class RedirectResponse
         exit;
     }
 

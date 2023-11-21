@@ -47,6 +47,14 @@ switch ($routeInfo[0]) {
             }
         }
         addNotificationsToTwig($twig);
+        /*todo swich (true)
+        case RedirectResponse
+
+        case ViewResponse
+
+
+
+        */
 
         /** @var Response $response */
         echo $twig->render($response->getViewName() . '.twig', $response->getData());
