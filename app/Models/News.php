@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 class News
 {
 
@@ -12,7 +14,8 @@ class News
     private string $title;
     private string $description;
     private string $text;
-    private ?string $date;// todo: need to be defoult null
+    private string $date;
+    private ?Carbon $updatedAt;
 
 
     public function __construct(
@@ -20,7 +23,8 @@ class News
         string $title,
         string $description,
         string $text,
-        ?string $date = null
+        string $date ,
+        ?Carbon $updatedAt = null
     )
     {
         $this->id = $id;
@@ -28,6 +32,7 @@ class News
         $this->description = $description;
         $this->text = $text;
         $this->date = $date;
+        $this->updatedAt =$updatedAt;
     }
 
     public function getId(): int
@@ -50,9 +55,14 @@ class News
         return $this->text;
     }
 
-    public function getDate(): ?string
+    public function getDate(): string
     {
         return $this->date;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updatedAt;
     }
 
 

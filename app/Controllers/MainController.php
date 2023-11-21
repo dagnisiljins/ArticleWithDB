@@ -151,17 +151,18 @@ class MainController
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
         $text = $_POST['text'] ?? '';
+        $updatedAt = Carbon::now();
 
         if ($id) {
             $stmt = $this->db->prepare(
-                "UPDATE articles SET title = :title, description = :description, text = :text WHERE id = :id"
+                "UPDATE articles SET title = :title, description = :description, text = :text, updated_at = :updatedAt WHERE id = :id"
             );
             $stmt->execute([
                 'title' => $title,
                 'description' => $description,
                 'text' => $text,
-                'id' => $id
-                // todo add time stump when changes where made, seperate tabele updated_at
+                'id' => $id,
+                'updatedAt' => $updatedAt
             ]);
         }
 
