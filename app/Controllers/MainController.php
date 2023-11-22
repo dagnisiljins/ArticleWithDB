@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Response\RedirectResponse;
+use App\Response\Response;
 use App\Database\DatabaseConnection;
 use App\Models\News;
 use App\Models\NewsCollection;
-use App\Response;
-use App\Utils\NotificationManager;
+use App\Response\ViewResponse;
 use Carbon\Carbon;
 
 class MainController
@@ -34,7 +35,7 @@ class MainController
             ));
         }
 
-        return new Response(
+        return new ViewResponse(
             'news/index',
             ['articles' => $articles]
         );
@@ -58,7 +59,7 @@ class MainController
             );
         }
 
-        return new Response(
+        return new ViewResponse(
             'news/show',
             ['article' => $article]
         );
@@ -66,20 +67,21 @@ class MainController
 
     public function create(): Response
     {
-        return new Response(
-            'news/create',
-            []
+        return new ViewResponse(
+            'news/create'
         );
 
     }
 
-    public function store(): string // todo: respect/validation validate POST
+    public function store(): Response
     {
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
         $text = $_POST['text'] ?? '';
 
-
+        $title = htmlspecialchars(trim($title));
+        $description = htmlspecialchars(trim($description));
+        $text = htmlspecialchars(trim($text));
 
         $stmt = $this->db->prepare(
             "INSERT INTO articles (title, description, text, date) VALUES (:title, :description, :text, :date)"
@@ -91,10 +93,12 @@ class MainController
             'date' => Carbon::now()
         ]);
 
-        NotificationManager::setNotification("Article successfully created!", "success");
+        $notification = [
+            'message' => "Article successfully created!",
+            'type' => "success"
+        ];
 
-        header('Location: /');
-        exit;
+        return new RedirectResponse('/', $notification);
     }
 
     public function search(): Response
@@ -115,7 +119,7 @@ class MainController
             ));
         }
 
-        return new Response(
+        return new ViewResponse(
             'news/index',
             ['articles' => $articles]
         );
@@ -139,19 +143,23 @@ class MainController
             );
         }
 
-        return new Response(
+        return new ViewResponse(
             'news/edit',
             ['article' => $article]
         );
     }
 
-    public function update(): string
+    public function update(): Response
     {
         $id = $_POST['id'] ?? null;
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
         $text = $_POST['text'] ?? '';
         $updatedAt = Carbon::now();
+
+        $title = htmlspecialchars(trim($title));
+        $description = htmlspecialchars(trim($description));
+        $text = htmlspecialchars(trim($text));
 
         if ($id) {
             $stmt = $this->db->prepare(
@@ -166,13 +174,16 @@ class MainController
             ]);
         }
 
-        NotificationManager::setNotification("Article successfully edited!", "success");
+        $notification = [
+            'message' => "Article successfully edited!",
+            'type' => "success"
+        ];
 
-        header('Location: /article/' . $id);
-        exit;
+        return new RedirectResponse('/article/' . $id, $notification);
+
     }
 
-    public function delete(array $vars): string
+    public function delete(array $vars): Response
     {
         $deleteId = (int)$vars['id'];
 
@@ -181,10 +192,12 @@ class MainController
             'id' => $deleteId
         ]);
 
-        NotificationManager::setNotification("Article successfully deleted!", "success");
+        $notification = [
+            'message' => "Article successfully deleted!",
+            'type' => "success"
+        ];
 
-        header('Location: /');//todo make interface Response and class ViewResponse and class RedirectResponse
-        exit;
+        return new RedirectResponse('/', $notification);
     }
 
 }

@@ -2,20 +2,27 @@
 
 session_start();
 
-use App\Response;
+use App\Response\RedirectResponse;
+use App\Response\ViewResponse;
 use App\Router\Router;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Twig\Extension\DebugExtension;
-use Dotenv\Dotenv;
 use Carbon\Carbon;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+
+function addNotificationsToTwig(Environment $twig): void {
+    if (isset($_SESSION['notifications'])) {
+        $twig->addGlobal('notifications', $_SESSION['notifications']);
+        unset($_SESSION['notifications']);
+    }
+}
 
 //$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
 //$dotenv->load();
 
-$loader = new FilesystemLoader(__DIR__ . '/../app/Views/');
+$loader = new FilesystemLoader(__DIR__ . '/../Views/');
 $twig = new Environment($loader);
 
 $currentTime = Carbon::now('Europe/Riga')->format('Y-m-d');
@@ -40,25 +47,22 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
 
         $response = (new $className())->{$method}($vars);
-        function addNotificationsToTwig(Environment $twig): void {
-            if (isset($_SESSION['notifications'])) {
-                $twig->addGlobal('notifications', $_SESSION['notifications']);
-                unset($_SESSION['notifications']);
-            }
-        }
+
+
         addNotificationsToTwig($twig);
-        /*todo swich (true)
-        case RedirectResponse
 
-        case ViewResponse
-
-
-
-        */
-
-        /** @var Response $response */
-        echo $twig->render($response->getViewName() . '.twig', $response->getData());
-
+        switch (true)
+        {
+            case $response instanceof ViewResponse:
+                echo $twig->render($response->getViewName() . '.twig', $response->getData());
+                break;
+            case $response instanceof RedirectResponse:
+                $response->send();
+                break;
+            default:
+                echo 'index php default';
+                break;
+        }
 
         break;
 }
