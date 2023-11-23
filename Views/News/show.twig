@@ -14,13 +14,19 @@
             <h5>{{ article.getDescription() }}</h5><br>
             <p>{{ article.getText() }}</p><br>
 
-            <div class="article-actions">
-                <a href="/edit/{{ article.getId() }}" class="edit-article-btn">Edit Article</a>
+
+
+
+            <form action="/edit/{{ article.getId() }}" method="get" class="delete-article-form">
+                <button type="submit" class="edit-article-btn">Edit Article</button>
+            </form><br>
+
 
                 <form action="/delete/{{ article.getId() }}" method="post" class="delete-article-form" onsubmit="return confirmDelete()">
                     <button type="submit" class="delete-article-btn">DELETE</button>
                 </form>
-            </div>
+
+
         </div>
     </div>
 </section>

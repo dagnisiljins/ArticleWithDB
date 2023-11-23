@@ -12,16 +12,33 @@
             <p class="news-box-single">No results found!</p>
         {% else %}
             {% for article in articles.getNewsCollection() %}
-                <div class="news-box">
-                    <a href="/article/{{ article.getId() }}">
+                <a class="news-box" href="/article/{{ article.getId() }}">
+
+
                         <h2>{{ article.getTitle() }}</h2>
-                    </a>
-                    <p>{{ article.getDate() }}</p><br>
-                    <p>{{ article.getDescription() }}</p><br>
-                    <a href="/article/{{ article.getId() }}" class="edit-article-btn">Read More</a>
-                </div>
+
+                        <p>{{ article.getDate() }}</p><br>
+                        <p>{{ article.getDescription() }}</p><br>
+                </a>
             {% endfor %}
         {% endif %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, {
+                    threshold: 0.1
+                });
+
+                document.querySelectorAll('.news-box').forEach(box => {
+                    observer.observe(box);
+                });
+            });
+        </script>
     </div>
 </section>
 {% include 'Partials/footer.twig' %}

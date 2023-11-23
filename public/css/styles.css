@@ -3,25 +3,20 @@ body, h1, h2, p {
     padding: 0;
 }
 
-h1.main-content {
-    text-align: center;
-}
-
-
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fafafa;
 }
 
 header {
-    background-color: #333;
+    background-color: #2C3E50;
     color: #fff;
     padding: 20px;
     text-align: center;
 }
 
 nav {
-    background-color: #444;
+    background-color: #34495E;
     color: #fff;
     text-align: center;
     padding: 10px;
@@ -58,46 +53,32 @@ nav a {
     flex: 1;
 }
 
-#country-select {
-    background: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    padding: 10px;
-    cursor: pointer;
-    width: 100%;
-}
-
-#country-select option {
-    font-size: 16px;
-}
-
 .search-box button {
-    background: #333;
+    background: #2980B9;
     color: #fff;
     border: none;
     border-radius: 4px;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .search-box button:hover {
-    background: #222;
+    background: #3498DB;
 }
 
 .main-content {
     max-width: 1000px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #f8f8f8;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .main-content h1 {
-    color: #333;
-    text-align: center;
+    color: #2C3E50;
     margin-bottom: 30px;
 }
 
@@ -123,15 +104,15 @@ textarea {
     font-size: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
-    resize: vertical; /* Allows vertical resizing of the textarea */
+    resize: vertical;
 }
 
 textarea {
-    height: 100px;
+    height: 200px;
 }
 
 button[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #16A085;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -142,48 +123,59 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #1ABC9C;
 }
 
 .news-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+.news-container a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    margin: 10px;
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+}
+
+.news-container a:hover, .news-container a:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    background-color: #f9f9f9;
+}
+
+.news-box h2, .news-box p {
+    margin: 10px 0;
+}
+
+.news-box, .news-box-single {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 4px;
+
 }
 
 .news-box {
-    flex: 0 0 calc(30% - 0px);
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.news-box a {
-    text-decoration: none;
-    color: #333;
+.news-box.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.news-box img {
-    max-width: 100%;
-    height: auto;
-}
 
-.news-box h2 {
-    margin: 10px 0;
-}
-
-.news-box-single {
-    flex: 0 0 calc(100% - 20px);
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.news-box-single img {
+.news-box img, .news-box-single img {
     max-width: 100%;
     height: auto;
     display: block;
@@ -192,9 +184,19 @@ button[type="submit"]:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.news-box h2 {
+    margin: 10px 0;
+}
+
+.news-box-single {
+    flex: 0 0 calc(100% - 20px);
+    margin: 10px;
+    padding: 10px;
+}
+
+
 footer {
-    background-color: #333;
-    backdrop-filter: blur(5px);
+    background-color: #34495E;
     color: #fff;
     text-align: center;
     padding: 10px;
@@ -212,17 +214,32 @@ footer {
     margin-top: 10px;
 }
 
-.edit-article-btn, .delete-article-btn {
+.edit-article-btn {
     padding: 8px 15px;
     text-decoration: none;
     color: white;
-    background-color: #007bff;
+    background-color: #2980B9;
     border: none;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .delete-article-btn {
-    background-color: #dc3545;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: white;
+    background-color: #E74C3C !important;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-article-btn:hover {
+    background-color: #3498DB;
+}
+
+.delete-article-btn:hover {
+    background-color: #C0392B !important; /* !important ensure it overrides any other styles*/
 }
 
 .delete-article-form {
