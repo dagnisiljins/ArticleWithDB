@@ -11,14 +11,20 @@ class DatabaseConnection
     private static ?DatabaseConnection $instance = null;
     private PDO $pdo;
 
-    private string $host = 'localhost';
-    private int $port = 3306;
-    private string $db   = 'myapp';
-    private string $user = 'root';
-    private string $pass = '';
+    private string $host;
+    private int $port;
+    private string $db;
+    private string $user;
+    private string $pass;
     private string $charset = 'utf8mb4';
 
     private function __construct() {
+        $this->host = $_ENV['DB_HOST'];
+        $this->port = (int)$_ENV['DB_PORT'];
+        $this->db = $_ENV['DB_NAME'];
+        $this->user = $_ENV['DB_USER'];
+        $this->pass = $_ENV['DB_PASSWORD'];
+
         $dsn = "mysql:host=$this->host;port=$this->port;dbname=$this->db;charset=$this->charset";
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

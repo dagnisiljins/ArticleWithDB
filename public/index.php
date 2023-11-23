@@ -6,6 +6,7 @@ use App\Response\RedirectResponse;
 use App\Response\ViewResponse;
 use App\Router\Router;
 use Carbon\Carbon;
+use Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -18,9 +19,9 @@ function addNotificationsToTwig(Environment $twig): void {
         unset($_SESSION['notifications']);
     }
 }
-
-//$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-//$dotenv->load();
+//todo: add .env for database connection
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
 $loader = new FilesystemLoader(__DIR__ . '/../Views/');
 $twig = new Environment($loader);
