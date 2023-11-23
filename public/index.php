@@ -19,7 +19,7 @@ function addNotificationsToTwig(Environment $twig): void {
         unset($_SESSION['notifications']);
     }
 }
-//todo: add .env for database connection
+
 $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
@@ -61,7 +61,7 @@ switch ($routeInfo[0]) {
                 $response->send();
                 break;
             default:
-                echo 'index php default';
+                echo 'View default';
                 break;
         }
 
