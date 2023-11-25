@@ -10,6 +10,11 @@ use App\Database\DatabaseConnection;
 use App\Models\News;
 use App\Models\NewsCollection;
 use App\Response\ViewResponse;
+use App\Services\Articles\DeleteArticleService;
+use App\Services\Articles\IndexArticleService;
+use App\Services\Articles\SearchArticleService;
+use App\Services\Articles\ShowArticleService;
+use App\Services\Articles\StoreArticleService;
 use Carbon\Carbon;
 
 class MainController
@@ -22,18 +27,8 @@ class MainController
 
     public function index(): Response
     {
-        $stmt = $this->db->query("SELECT * FROM articles");
-
-        $articles = new NewsCollection();
-        while ($row = $stmt->fetch()) {
-            $articles->add(new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            ));
-        }
+        $service = new IndexArticleService();
+        $articles = $service->execute();
 
         return new ViewResponse(
             'news/index',
@@ -45,19 +40,8 @@ class MainController
     {
         $id = (int)$vars['id'];
 
-        $stmt = $this->db->prepare("SELECT * FROM articles WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-
-        $article = null;
-        if ($row = $stmt->fetch()) {
-            $article = new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            );
-        }
+        $service = new ShowArticleService();
+        $article = $service->execute($id);
 
         return new ViewResponse(
             'news/show',
@@ -75,23 +59,12 @@ class MainController
 
     public function store(): Response
     {
-        $title = $_POST['title'] ?? '';
-        $description = $_POST['description'] ?? '';
-        $text = $_POST['text'] ?? '';
+        $title = htmlspecialchars(trim($_POST['title']));
+        $description = htmlspecialchars(trim($_POST['description']));
+        $text = htmlspecialchars(trim($_POST['text']));
 
-        $title = htmlspecialchars(trim($title));
-        $description = htmlspecialchars(trim($description));
-        $text = htmlspecialchars(trim($text));
-
-        $stmt = $this->db->prepare(
-            "INSERT INTO articles (title, description, text, date) VALUES (:title, :description, :text, :date)"
-        );
-        $stmt->execute([
-            'title' => $title,
-            'description' => $description,
-            'text' => $text,
-            'date' => Carbon::now()
-        ]);
+        $store = new StoreArticleService();
+        $store->execute($title, $description, $text);
 
         $notification = [
             'message' => "Article successfully created!",
@@ -104,20 +77,8 @@ class MainController
     public function search(): Response
     {
         $title = $_GET['query'] ?? '';
-
-        $stmt = $this->db->prepare("SELECT * FROM articles WHERE title LIKE :title");
-        $stmt->execute(['title' => '%' . $title . '%']);
-
-        $articles = new NewsCollection();
-        while ($row = $stmt->fetch()) {
-            $articles->add(new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            ));
-        }
+        $service = new SearchArticleService();
+        $articles = $service->execute($title);
 
         return new ViewResponse(
             'news/index',
@@ -127,21 +88,10 @@ class MainController
 
     public function edit(array $vars): Response
     {
-        $editId = (int)$vars['id'];
+        $id = (int)$vars['id'];
 
-        $stmt = $this->db->prepare("SELECT * FROM articles WHERE id = :id");
-        $stmt->execute(['id' => $editId]);
-
-        $article = null;
-        if ($row = $stmt->fetch()) {
-            $article = new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            );
-        }
+        $service = new ShowArticleService();
+        $article = $service->execute($id);
 
         return new ViewResponse(
             'news/edit',
@@ -155,24 +105,13 @@ class MainController
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
         $text = $_POST['text'] ?? '';
-        $updatedAt = Carbon::now();
 
         $title = htmlspecialchars(trim($title));
         $description = htmlspecialchars(trim($description));
         $text = htmlspecialchars(trim($text));
 
-        if ($id) {
-            $stmt = $this->db->prepare(
-                "UPDATE articles SET title = :title, description = :description, text = :text, updated_at = :updatedAt WHERE id = :id"
-            );
-            $stmt->execute([
-                'title' => $title,
-                'description' => $description,
-                'text' => $text,
-                'id' => $id,
-                'updatedAt' => $updatedAt
-            ]);
-        }
+        $store = new StoreArticleService();
+        $store->execute($title, $description, $text, (int)$id);
 
         $notification = [
             'message' => "Article successfully edited!",
@@ -185,12 +124,10 @@ class MainController
 
     public function delete(array $vars): Response
     {
-        $deleteId = (int)$vars['id'];
+        $id = (int)$vars['id'];
 
-        $stmt = $this->db->prepare("DELETE FROM articles WHERE id = :id");
-        $stmt->execute([
-            'id' => $deleteId
-        ]);
+        $service = new DeleteArticleService();
+        $service->execute($id);
 
         $notification = [
             'message' => "Article successfully deleted!",

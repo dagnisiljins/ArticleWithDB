@@ -10,7 +10,7 @@ class News
 {
 
 
-    private int $id;
+    private ?int $id;
     private string $title;
     private string $description;
     private string $text;
@@ -19,7 +19,7 @@ class News
 
 
     public function __construct(
-        int    $id,
+        ?int    $id,
         string $title,
         string $description,
         string $text,
