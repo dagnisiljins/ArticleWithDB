@@ -15,6 +15,7 @@ use App\Services\Articles\IndexArticleService;
 use App\Services\Articles\SearchArticleService;
 use App\Services\Articles\ShowArticleService;
 use App\Services\Articles\StoreArticleService;
+use App\Services\Articles\UpdateArticleService;
 use Carbon\Carbon;
 
 class MainController
@@ -110,7 +111,7 @@ class MainController
         $description = htmlspecialchars(trim($description));
         $text = htmlspecialchars(trim($text));
 
-        $store = new StoreArticleService();
+        $store = new UpdateArticleService();
         $store->execute($title, $description, $text, (int)$id);
 
         $notification = [

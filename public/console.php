@@ -34,10 +34,11 @@ $service = new SearchArticleService();
 $articles = $service->execute('test');
 var_dump($articles);
 */
-/*
-$service = new DeleteArticleService();
-$service->execute(20);
-*/
 
+$service = new DeleteArticleService();
+$service->execute(28);
+
+/*
 $store = new StoreArticleService();
 $store->execute('Console update', 'test', 'test', 19);
+*/

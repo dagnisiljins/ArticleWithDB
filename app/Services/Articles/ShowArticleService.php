@@ -6,32 +6,19 @@ namespace App\Services\Articles;
 
 use App\Database\DatabaseConnection;
 use App\Models\News;
+use App\Repositories\ArticleRepository;
 
 
 class ShowArticleService
 {
-    private \PDO $db;
+    private ArticleRepository $articleRepository;
     public function __construct()
     {
-        $this->db = DatabaseConnection::getInstance()->getConnection();
+        $this->articleRepository = new ArticleRepository();
     }
     public function execute(int $id): News
     {
-        $stmt = $this->db->prepare("SELECT * FROM articles WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-
-        $article = null;
-        if ($row = $stmt->fetch()) {
-            $article = new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            );
-        }
-
-        return $article;
+        return $this->articleRepository->getByID($id);
     }
 
 }

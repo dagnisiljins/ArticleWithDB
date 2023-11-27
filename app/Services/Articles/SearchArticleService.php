@@ -4,35 +4,20 @@ declare(strict_types=1);
 
 namespace App\Services\Articles;
 
-use App\Database\DatabaseConnection;
-use App\Models\News;
 use App\Models\NewsCollection;
+use App\Repositories\ArticleRepository;
 
 
 class SearchArticleService
 {
-    private \PDO $db;
-
+    private ArticleRepository $articleRepository;
     public function __construct()
     {
-        $this->db = DatabaseConnection::getInstance()->getConnection();
+        $this->articleRepository = new ArticleRepository();
     }
 
     public function execute(string $title): NewsCollection
     {
-        $stmt = $this->db->prepare("SELECT * FROM articles WHERE title LIKE :title");
-        $stmt->execute(['title' => '%' . $title . '%']);
-
-        $articles = new NewsCollection();
-        while ($row = $stmt->fetch()) {
-            $articles->add(new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            ));
-        }
-        return $articles;
+        return $this->articleRepository->searchByTitle($title);
     }
 }

@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace App\Services\Articles;
 
-use App\Database\DatabaseConnection;
+use App\Repositories\ArticleRepository;
+use http\Exception;
 
 class DeleteArticleService
 {
-    private \PDO $db;
-
+    private ArticleRepository $articleRepository;
     public function __construct()
     {
-        $this->db = DatabaseConnection::getInstance()->getConnection();
+        $this->articleRepository = new ArticleRepository();
     }
 
     public function execute(int $id): void
     {
-        $stmt = $this->db->prepare("DELETE FROM articles WHERE id = :id");
-        $stmt->execute([
-            'id' => $id
-        ]);
+        $articleToDelete = $this->articleRepository->getByID($id);
+
+        if ($articleToDelete === null) {
+            throw new \Exception('Article not found for ID: ' . $id);
+        }
+        $this->articleRepository->delete($articleToDelete);
     }
 }
 

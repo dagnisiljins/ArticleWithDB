@@ -4,34 +4,21 @@ declare(strict_types=1);
 
 namespace App\Services\Articles;
 
-use App\Database\DatabaseConnection;
-use App\Models\News;
 use App\Models\NewsCollection;
+use App\Repositories\ArticleRepository;
 
 class IndexArticleService
 {
-    private \PDO $db;
+    private ArticleRepository $articleRepository;
     public function __construct()
     {
-        $this->db = DatabaseConnection::getInstance()->getConnection();
+        $this->articleRepository = new ArticleRepository();
     }
     public function execute(): NewsCollection
-
     {
-        $stmt = $this->db->query("SELECT * FROM articles");
 
-        $articles = new NewsCollection();
-        while ($row = $stmt->fetch()) {
-            $articles->add(new News(
-                $row['id'],
-                $row['title'],
-                $row['description'],
-                $row['text'],
-                $row['date']
-            ));
-        }
 
-        return $articles;
+        return $this->articleRepository->getAll();
     }
 
 

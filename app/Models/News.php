@@ -10,32 +10,33 @@ class News
 {
 
 
-    private ?int $id;
+
     private string $title;
     private string $description;
     private string $text;
-    private string $date;
+    private ?int $id;
+    private ?string $date;
     private ?Carbon $updatedAt;
 
 
     public function __construct(
-        ?int    $id,
         string $title,
         string $description,
         string $text,
-        string $date ,
+        ?int    $id = null,
+        ?string $date = null,
         ?Carbon $updatedAt = null
     )
     {
-        $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->text = $text;
+        $this->id = $id;
         $this->date = $date;
-        $this->updatedAt =$updatedAt;
+        $this->updatedAt =$updatedAt ? new Carbon($updatedAt) : null;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -63,6 +64,14 @@ class News
     public function getUpdatedAt(): ?Carbon
     {
         return $this->updatedAt;
+    }
+
+    public function update(array $data): void
+    {
+        $this->title = $data['title'];
+        $this->description = $data['description'];
+        $this->text = $data['text'];
+        $this->updatedAt = Carbon::now();
     }
 
 

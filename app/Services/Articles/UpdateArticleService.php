@@ -8,7 +8,7 @@ use App\Models\News;
 use App\Repositories\ArticleRepository;
 
 
-class StoreArticleService
+class UpdateArticleService
 {
     private ArticleRepository $articleRepository;
     public function __construct()
@@ -16,14 +16,15 @@ class StoreArticleService
         $this->articleRepository = new ArticleRepository();
     }
 
-    public function execute(string $title, string $description, string $text, int $id = null): void
+    public function execute(string $title, string $description, string $text, int $id): void
     {
-        $article = new News(
-            $title,
-            $description,
-            $text,
-            $id
-        );
+        $article = $this->articleRepository->getByID($id);
+
+        $article->update([
+            'title' => $title,
+            'description' => $description,
+            'text' => $text
+        ]);
 
         $this->articleRepository->save($article);
 
