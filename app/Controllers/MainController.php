@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\News;
 use App\Response\RedirectResponse;
 use App\Response\Response;
 use App\Response\ViewResponse;
@@ -16,11 +17,36 @@ use App\Services\Articles\UpdateArticleService;
 
 class MainController
 {
+    private IndexArticleService $articleService;
+    private ShowArticleService $showArticleService;
+    private StoreArticleService $storeArticleService;
+    private SearchArticleService $searchArticleService;
+    private UpdateArticleService $updateArticleService;
+    private DeleteArticleService $deleteArticleService;
+
+    public function __construct(
+        IndexArticleService $articleService,
+        ShowArticleService $showArticleService,
+        StoreArticleService $storeArticleService,
+        SearchArticleService $searchArticleService,
+        UpdateArticleService $updateArticleService,
+        DeleteArticleService $deleteArticleService
+    )
+    {
+        $this->articleService = $articleService;
+        $this->showArticleService = $showArticleService;
+        $this->storeArticleService = $storeArticleService;
+        $this->searchArticleService = $searchArticleService;
+        $this->updateArticleService = $updateArticleService;
+        $this->deleteArticleService = $deleteArticleService;
+    }
 
     public function index(): Response
     {
-        $service = new IndexArticleService();
-        $articles = $service->execute();
+        /*$service = new IndexArticleService();
+        $articles = $service->execute();*/
+
+        $articles = $this->articleService->execute();
 
         return new ViewResponse(
             'news/index',
@@ -32,8 +58,10 @@ class MainController
     {
         $id = (int)$vars['id'];
 
-        $service = new ShowArticleService();
-        $article = $service->execute($id);
+        /*$service = new ShowArticleService();
+        $article = $service->execute($id);*/
+
+        $article = $this->showArticleService->execute($id);
 
         return new ViewResponse(
             'news/show',
@@ -55,8 +83,13 @@ class MainController
         $description = htmlspecialchars(trim($_POST['description']));
         $text = htmlspecialchars(trim($_POST['text']));
 
-        $store = new StoreArticleService();
-        $store->execute($title, $description, $text);
+        $article = new News(
+            $title,
+            $description,
+            $text
+        );
+
+        $this->storeArticleService->execute($article);
 
         $notification = [
             'message' => "Article successfully created!",
@@ -69,8 +102,10 @@ class MainController
     public function search(): Response
     {
         $title = $_GET['query'] ?? '';
-        $service = new SearchArticleService();
-        $articles = $service->execute($title);
+        /*$service = new SearchArticleService();
+        $articles = $service->execute($title);*/
+
+        $articles = $this->searchArticleService->execute($title);
 
         return new ViewResponse(
             'news/index',
@@ -82,8 +117,7 @@ class MainController
     {
         $id = (int)$vars['id'];
 
-        $service = new ShowArticleService();
-        $article = $service->execute($id);
+        $article = $this->showArticleService->execute($id);
 
         return new ViewResponse(
             'news/edit',
@@ -102,8 +136,9 @@ class MainController
         $description = htmlspecialchars(trim($description));
         $text = htmlspecialchars(trim($text));
 
-        $store = new UpdateArticleService();
-        $store->execute($title, $description, $text, (int)$id);
+        /*$store = new UpdateArticleService();
+        $store->execute($title, $description, $text, (int)$id);*/
+        $this->updateArticleService->execute($title, $description, $text, (int)$id);
 
         $notification = [
             'message' => "Article successfully edited!",
@@ -117,9 +152,7 @@ class MainController
     public function delete(array $vars): Response
     {
         $id = (int)$vars['id'];
-
-        $service = new DeleteArticleService();
-        $service->execute($id);
+        $this->deleteArticleService->execute($id);
 
         $notification = [
             'message' => "Article successfully deleted!",

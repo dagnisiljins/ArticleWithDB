@@ -12,21 +12,17 @@ use App\Repositories\MysqlArticleRepository;
 class StoreArticleService
 {
     private ArticleRepositoryInterface $articleRepository;
-    public function __construct()
+    /*public function __construct()
     {
         $this->articleRepository = new MysqlArticleRepository();
+    }*/
+    public function __construct(ArticleRepositoryInterface $articleRepository)
+    {
+        $this->articleRepository = $articleRepository;
     }
 
-    public function execute(string $title, string $description, string $text, int $id = null): void
+    public function execute($article): void
     {
-        $article = new News(
-            $title,
-            $description,
-            $text,
-            $id
-        );
-
         $this->articleRepository->save($article);
-
     }
 }

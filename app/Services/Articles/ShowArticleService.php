@@ -13,9 +13,14 @@ use App\Repositories\MysqlArticleRepository;
 class ShowArticleService
 {
     private ArticleRepositoryInterface $articleRepository;
-    public function __construct()
+    /*public function __construct()
     {
         $this->articleRepository = new MysqlArticleRepository();
+    }*/
+
+    public function __construct(ArticleRepositoryInterface $articleRepository)
+    {
+        $this->articleRepository = $articleRepository;
     }
     public function execute(int $id): News
     {

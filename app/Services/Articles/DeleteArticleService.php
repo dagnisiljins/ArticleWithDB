@@ -11,9 +11,9 @@ use http\Exception;
 class DeleteArticleService
 {
     private ArticleRepositoryInterface $articleRepository;
-    public function __construct()
+    public function __construct(ArticleRepositoryInterface $articleRepository)
     {
-        $this->articleRepository = new MysqlArticleRepository();
+        $this->articleRepository = $articleRepository;
     }
 
     public function execute(int $id): void

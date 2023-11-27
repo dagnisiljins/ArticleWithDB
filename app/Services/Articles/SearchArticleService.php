@@ -12,9 +12,9 @@ use App\Repositories\MysqlArticleRepository;
 class SearchArticleService
 {
     private ArticleRepositoryInterface $articleRepository;
-    public function __construct()
+    public function __construct(ArticleRepositoryInterface $articleRepository)
     {
-        $this->articleRepository = new MysqlArticleRepository();
+        $this->articleRepository = $articleRepository;
     }
 
     public function execute(string $title): NewsCollection
