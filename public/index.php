@@ -2,6 +2,8 @@
 
 session_start();
 
+use App\Repositories\ArticleRepositoryInterface;
+use App\Repositories\MysqlArticleRepository;
 use App\Response\RedirectResponse;
 use App\Response\ViewResponse;
 use App\Router\Router;
@@ -10,6 +12,7 @@ use Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
+
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

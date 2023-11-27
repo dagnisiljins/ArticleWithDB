@@ -5,26 +5,20 @@ declare(strict_types=1);
 namespace App\Services\Articles;
 
 use App\Models\NewsCollection;
-use App\Repositories\ArticleRepository;
+use App\Repositories\ArticleRepositoryInterface;
+use App\Repositories\MysqlArticleRepository;
 
 class IndexArticleService
 {
-    private ArticleRepository $articleRepository;
+    private ArticleRepositoryInterface $articleRepository;
     public function __construct()
     {
-        $this->articleRepository = new ArticleRepository();
+        $this->articleRepository = new MysqlArticleRepository();
     }
     public function execute(): NewsCollection
     {
 
-
         return $this->articleRepository->getAll();
     }
-
-
-
-
-
-
 
 }

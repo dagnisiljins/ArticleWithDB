@@ -6,9 +6,6 @@ namespace App\Controllers;
 
 use App\Response\RedirectResponse;
 use App\Response\Response;
-use App\Database\DatabaseConnection;
-use App\Models\News;
-use App\Models\NewsCollection;
 use App\Response\ViewResponse;
 use App\Services\Articles\DeleteArticleService;
 use App\Services\Articles\IndexArticleService;
@@ -16,15 +13,9 @@ use App\Services\Articles\SearchArticleService;
 use App\Services\Articles\ShowArticleService;
 use App\Services\Articles\StoreArticleService;
 use App\Services\Articles\UpdateArticleService;
-use Carbon\Carbon;
 
 class MainController
 {
-    private \PDO $db;
-    public function __construct()
-    {
-        $this->db = DatabaseConnection::getInstance()->getConnection();
-    }
 
     public function index(): Response
     {

@@ -9,7 +9,7 @@ use App\Models\News;
 use App\Models\NewsCollection;
 use Carbon\Carbon;
 
-class ArticleRepository
+class MysqlArticleRepository implements ArticleRepositoryInterface
 {
 
     private \PDO $db;
