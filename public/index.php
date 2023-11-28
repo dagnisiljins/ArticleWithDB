@@ -24,10 +24,7 @@ use DI\ContainerBuilder;
 use function DI\create;
 use function DI\get;
 
-
 require_once __DIR__ . '/../vendor/autoload.php';
-
-
 
 function addNotificationsToTwig(Environment $twig): void {
     if (isset($_SESSION['notifications'])) {
