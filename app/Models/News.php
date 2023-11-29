@@ -10,22 +10,23 @@ class News
 {
 
 
-
     private string $title;
     private string $description;
     private string $text;
     private ?int $id;
     private ?string $date;
     private ?Carbon $updatedAt;
+    private ?string $url;
 
 
     public function __construct(
-        string $title,
-        string $description,
-        string $text,
+        string  $title,
+        string  $description,
+        string  $text,
         ?int    $id = null,
         ?string $date = null,
-        ?Carbon $updatedAt = null
+        ?Carbon $updatedAt = null,
+        ?string $url = null
     )
     {
         $this->title = $title;
@@ -33,7 +34,8 @@ class News
         $this->text = $text;
         $this->id = $id;
         $this->date = $date;
-        $this->updatedAt =$updatedAt ? new Carbon($updatedAt) : null;
+        $this->updatedAt = $updatedAt ? new Carbon($updatedAt) : null;
+        $this->url = $url;
     }
 
     public function getId(): ?int
@@ -56,7 +58,7 @@ class News
         return $this->text;
     }
 
-    public function getDate(): string
+    public function getDate(): ?string
     {
         return $this->date;
     }
@@ -65,6 +67,10 @@ class News
     {
         return $this->updatedAt;
     }
+     public function getUrl(): ?string
+     {
+         return $this->url;
+     }
 
     public function update(array $data): void
     {

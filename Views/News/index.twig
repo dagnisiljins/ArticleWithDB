@@ -12,18 +12,23 @@
             <p class="news-box-single">No results found!</p>
         {% else %}
             {% for article in articles.getNewsCollection() %}
-                <a class="news-box" href="/article/{{ article.getId() }}">
-
-
+                {% if article.getId() is not null %}
+                    <a class="news-box" href="/article/{{ article.getId() }}">
                         <h2>{{ article.getTitle() }}</h2>
-
                         <p>{{ article.getDate() }}</p><br>
                         <p>{{ article.getDescription() }}</p><br>
-                </a>
+                    </a>
+                {% else %}
+                    <a class="news-box" href="{{ article.getUrl() }}" target="_blank">
+                        <h2>{{ article.getTitle() }}</h2>
+                        <p>{{ article.getDate() }}</p><br>
+                        <p>{{ article.getDescription() }}</p><br>
+                    </a>
+                {% endif %}
             {% endfor %}
         {% endif %}
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {

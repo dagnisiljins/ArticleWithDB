@@ -19,6 +19,7 @@
         "symfony/var-dumper": "^5.4",
         "nesbot/carbon": "^2.71",
         "php-di/php-di": "^6.4",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+        "ext-json": "*"
     }
 }

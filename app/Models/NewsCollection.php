@@ -7,7 +7,7 @@ namespace App\Models;
 class NewsCollection
 {
 
-    private array $newsCollection;
+    private array $newsCollection = [];
 
     public function __construct(array $newsCollection = [])
     {
@@ -28,6 +28,16 @@ class NewsCollection
     public function isEmpty(): bool
     {
         return empty($this->newsCollection);
+    }
+
+    public function getAll(): array
+    {
+        return $this->newsCollection;
+    }
+
+    public function merge(NewsCollection $collection): void
+    {
+       $this->newsCollection = array_merge($this->newsCollection, $collection->getAll());
     }
 
 }
