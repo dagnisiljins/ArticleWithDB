@@ -6,7 +6,7 @@
             {{ notification.message }}
         </div>
     {% endfor %}
-    <h1 class="news-box-single">Articles</h1>
+    <h1 class="news-box-single">{% if search is defined and search %}Search results for: "{{ search }}"{% else %} Articles {% endif %}</h1>
     <div class="news-container">
         {% if articles.isEmpty() %}
             <p class="news-box-single">No results found!</p>

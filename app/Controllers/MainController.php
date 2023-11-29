@@ -25,9 +25,9 @@ class MainController
     private DeleteArticleService $deleteArticleService;
 
     public function __construct(
-        IndexArticleService $articleService,
-        ShowArticleService $showArticleService,
-        StoreArticleService $storeArticleService,
+        IndexArticleService  $articleService,
+        ShowArticleService   $showArticleService,
+        StoreArticleService  $storeArticleService,
         SearchArticleService $searchArticleService,
         UpdateArticleService $updateArticleService,
         DeleteArticleService $deleteArticleService
@@ -109,7 +109,10 @@ class MainController
 
         return new ViewResponse(
             'news/index',
-            ['articles' => $articles]
+            [
+                'articles' => $articles,
+                'search' => $title,
+            ]
         );
     }
 
