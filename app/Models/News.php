@@ -11,8 +11,8 @@ class News
 
 
     private string $title;
-    private string $description;
-    private string $text;
+    private ?string $description;
+    private ?string $text;
     private ?int $id;
     private ?string $date;
     private ?Carbon $updatedAt;
@@ -21,8 +21,8 @@ class News
 
     public function __construct(
         string  $title,
-        string  $description,
-        string  $text,
+        ?string  $description,
+        ?string  $text,
         ?int    $id = null,
         ?string $date = null,
         ?Carbon $updatedAt = null,
@@ -48,12 +48,12 @@ class News
         return $this->title;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }
